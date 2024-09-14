@@ -1,0 +1,11 @@
+C:\Users\dmytro\source\repos\net_cw_1\bin\Debug\net_cw_1.exe.config
+C:\Users\dmytro\source\repos\net_cw_1\bin\Debug\net_cw_1.exe
+C:\Users\dmytro\source\repos\net_cw_1\bin\Debug\net_cw_1.pdb
+C:\Users\dmytro\source\repos\net_cw_1\obj\Debug\net_cw_1.csproj.AssemblyReference.cache
+C:\Users\dmytro\source\repos\net_cw_1\obj\Debug\net_cw_1.csproj.CoreCompileInputs.cache
+C:\Users\dmytro\source\repos\net_cw_1\obj\Debug\net_cw_1.exe
+C:\Users\dmytro\source\repos\net_cw_1\obj\Debug\net_cw_1.pdb
+C:\Users\dmytro\source\repos\net_cw_1\bin\Debug\net_cw_1.exe.manifest
+C:\Users\dmytro\source\repos\net_cw_1\bin\Debug\net_cw_1.application
+C:\Users\dmytro\source\repos\net_cw_1\obj\Debug\net_cw_1.exe.manifest
+C:\Users\dmytro\source\repos\net_cw_1\obj\Debug\net_cw_1.application
