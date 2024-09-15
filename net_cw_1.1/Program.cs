@@ -3,14 +3,15 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-namespace net_cw_1._1requestBytes
+namespace net_cw_1._2
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            TcpClient client = new TcpClient("127.0.0.1", 25564);
-            Console.WriteLine("Connected to the server");
+            TcpClient client = new TcpClient();
+            client.Connect("127.0.0.1", 25564);
+            Console.WriteLine("Connected to the server.");
 
             NetworkStream stream = client.GetStream();
 
