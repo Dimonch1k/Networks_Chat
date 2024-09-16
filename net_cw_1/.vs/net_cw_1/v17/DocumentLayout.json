@@ -5,17 +5,34 @@
     {
       "AbsoluteMoniker": "D:0:0:{50BE8C47-A030-49FC-884A-BE54B51A125A}|net_cw_1.csproj|c:\\users\\dmytro\\desktop\\git\\networks_chat\\net_cw_1\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{50BE8C47-A030-49FC-884A-BE54B51A125A}|net_cw_1.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{50BE8C47-A030-49FC-884A-BE54B51A125A}|net_cw_1.csproj|c:\\users\\dmytro\\desktop\\git\\networks_chat\\net_cw_1\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{50BE8C47-A030-49FC-884A-BE54B51A125A}|net_cw_1.csproj|solutionrelative:app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
     }
   ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
-      "VerticalTabListWidth": 256,
+      "VerticalTabListWidth": 100,
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "App.config",
+              "DocumentMoniker": "C:\\Users\\dmytro\\Desktop\\Git\\Networks_Chat\\net_cw_1\\App.config",
+              "RelativeDocumentMoniker": "App.config",
+              "ToolTip": "C:\\Users\\dmytro\\Desktop\\Git\\Networks_Chat\\net_cw_1\\App.config",
+              "RelativeToolTip": "App.config",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2024-09-15T09:56:56.366Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -24,7 +41,7 @@
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "C:\\Users\\dmytro\\Desktop\\Git\\Networks_Chat\\net_cw_1\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AQIAADQAAAAAAAAAAAAUwEcAAABBAAAA",
+              "ViewState": "AQIAAC0AAAAAAAAAAAAowEAAAAAfAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-15T08:25:41.792Z",
               "EditorCaption": ""
