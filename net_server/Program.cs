@@ -1,8 +1,7 @@
-﻿using System.Net;
+﻿using MySql.Data.MySqlClient;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using MySql;
-using MySql.Data.MySqlClient;
 
 namespace net_cw_1
 {
@@ -10,7 +9,7 @@ namespace net_cw_1
     {
         static List<TcpClient> clients = new List<TcpClient>();
         static object lockObj = new object();
-        static string connectionString = "Server=34.118.84.47;Database=ChatApp;User ID=dmytro;Password=your_password";
+        static string connectionString = "Server=34.118.84.47;Database=bdatab;User ID=bogdan;Password=!Bogdan666;";
 
         static void Main(string[] args)
         {
@@ -31,9 +30,9 @@ namespace net_cw_1
             NetworkStream stream = client.GetStream();
             byte[] buffer = new byte[1024];
 
+
             try
             {
-                // Read username, password, and server address sent by the client
                 int bytesRead = stream.Read(buffer, 0, buffer.Length);
                 string loginData = Encoding.UTF8.GetString(buffer, 0, bytesRead);
                 string[] credentials = loginData.Split(';');
@@ -91,6 +90,34 @@ namespace net_cw_1
                 }
             }
             return false;
+        }
+
+        static bool RegisterUser(string username, string password)
+        {
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+
+                string checkQuery = "SELECT COUNT(*) FROM Users WHERE username = @username";
+                using (var checkCommand = new MySqlCommand(checkQuery, connection))
+                {
+                    checkCommand.Parameters.AddWithValue("@username", username);
+                    int userCount = Convert.ToInt32(checkCommand.ExecuteScalar());
+
+                    if (userCount > 0) return false;
+                }
+
+
+                string query = "INSERT INTO Users (username, password) VALUES (@username, @password)";
+                using (var cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@username", username);
+                    cmd.Parameters.AddWithValue("@passwordHash", password);
+
+                    int result = cmd.ExecuteNonQuery();
+                    return result > 0;
+                }
+            }
         }
 
         static void HandleChat(TcpClient client, string username)
