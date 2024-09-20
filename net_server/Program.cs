@@ -1,6 +1,8 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using MySql;
+using MySql.Data.MySqlClient;
 
 namespace net_cw_1
 {
@@ -8,27 +10,17 @@ namespace net_cw_1
     {
         static List<TcpClient> clients = new List<TcpClient>();
         static object lockObj = new object();
-
-        static string connectionString = "Server=34.118.84.47;Database=ChatApp;User ID=dmytro;";
-
-        //static string connectionString = ConfigurationManager.ConnectionStrings["DB_ChatApp"].ConnectionString;
-
+        static string connectionString = "Server=34.118.84.47;Database=ChatApp;User ID=dmytro;Password=your_password";
 
         static void Main(string[] args)
         {
             TcpListener server = new TcpListener(IPAddress.Any, 25564);
             server.Start();
-            Console.WriteLine("Multi thread server started. Waiting for clients...");
+            Console.WriteLine("Multi-threaded server started. Waiting for clients...");
 
             while (true)
             {
                 TcpClient client = server.AcceptTcpClient();
-                lock (lockObj)
-                {
-                    clients.Add(client);
-                }
-                Console.WriteLine("New client connected.");
-
                 Thread clientThread = new Thread(() => HandleClient(client));
                 clientThread.Start();
             }
@@ -38,9 +30,74 @@ namespace net_cw_1
         {
             NetworkStream stream = client.GetStream();
             byte[] buffer = new byte[1024];
-            string clientEndPoint = client.Client.RemoteEndPoint.ToString();
 
-            Console.WriteLine($"Client {clientEndPoint} connected.");
+            try
+            {
+                // Read username, password, and server address sent by the client
+                int bytesRead = stream.Read(buffer, 0, buffer.Length);
+                string loginData = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                string[] credentials = loginData.Split(';');
+
+                string username = credentials[0];
+                string password = credentials[1];
+                string serverAddress = credentials[2];
+
+                bool isAuthenticated = AuthenticateUser(username, password, serverAddress);
+
+                if (isAuthenticated)
+                {
+                    byte[] okMessage = Encoding.UTF8.GetBytes("OK");
+                    stream.Write(okMessage, 0, okMessage.Length);
+
+                    lock (lockObj)
+                    {
+                        clients.Add(client);
+                    }
+
+                    HandleChat(client, username);
+                }
+                else
+                {
+                    byte[] errorMessage = Encoding.UTF8.GetBytes("ERROR: Authentication failed");
+                    stream.Write(errorMessage, 0, errorMessage.Length);
+                    client.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
+
+        static bool AuthenticateUser(string username, string password, string serverAddress)
+        {
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "SELECT * FROM Users WHERE username = @username AND password = @password";
+                using (var command = new MySqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@username", username);
+                    command.Parameters.AddWithValue("@password", password);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            string dbServerAddress = reader["server_address"].ToString();
+                            return dbServerAddress == serverAddress;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        static void HandleChat(TcpClient client, string username)
+        {
+            NetworkStream stream = client.GetStream();
+            byte[] buffer = new byte[1024];
+            Console.WriteLine($"User {username} authenticated.");
 
             try
             {
@@ -49,79 +106,42 @@ namespace net_cw_1
                     int bytesRead = stream.Read(buffer, 0, buffer.Length);
                     if (bytesRead == 0) break;
 
-                    string messageReceived = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                    Console.WriteLine($"Client {clientEndPoint}: {messageReceived}");
-
-                    if (messageReceived.ToLower() == "exit")
-                    {
-                        Console.WriteLine($"Client {clientEndPoint} has finished the chat.");
-                        break;
-                    }
-                    BroadcastMessage(messageReceived, clientEndPoint);
+                    string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                    Console.WriteLine($"{username}: {message}");
+                    BroadcastMessage($"{username}: {message}", client);
                 }
             }
-            catch (Exception ex) { Console.WriteLine($"Error with client {clientEndPoint}: {ex.Message}"); }
             finally
             {
-                lock (lockObj) clients.Remove(client);
-
+                lock (lockObj)
+                {
+                    clients.Remove(client);
+                }
                 stream.Close();
                 client.Close();
-                Console.WriteLine($"Client {clientEndPoint} disconnected.");
             }
         }
 
-        static void BroadcastMessage(string message, string sender)
+        static void BroadcastMessage(string message, TcpClient sender)
         {
-            byte[] data = Encoding.UTF8.GetBytes($"{sender}: {message}");
-
+            byte[] data = Encoding.UTF8.GetBytes(message);
             lock (lockObj)
             {
                 foreach (TcpClient client in clients)
                 {
-                    try
+                    if (client != sender)
                     {
-                        NetworkStream stream = client.GetStream();
-                        stream.Write(data, 0, data.Length);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error during sending message: {ex.Message}");
+                        try
+                        {
+                            NetworkStream stream = client.GetStream();
+                            stream.Write(data, 0, data.Length);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Error sending message: {ex.Message}");
+                        }
                     }
                 }
-            }
-        }
-
-        static void LogConnection(TcpClient client)
-        {
-            string clientAddress = client.Client.RemoteEndPoint.ToString();
-            string query = "INSERT INTO ConnectionLogs (ClientAddress, ConnectionTime) VALUES (@ClientAddress, @ConnectionTime)";
-
-            using (ConnectionString = new(connectionString))
-            {
-                MySqlCommand cmd = new MySqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@ClientAddress", clientAddress);
-                cmd.Parameters.AddWithValue("@ConnectionTime", DateTime.Now);
-
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
-
-        }
-
-        static void LogDisconnection(TcpClient client)
-        {
-            string clientAddress = client.Client.RemoteEndPoint.ToString();
-            string query = "UPDATE ConnectionLogs SET DisconnectionTime = @DisconnectionTime WHERE ClientAddress = @ClientAddress AND DisconnectionTime IS NULL";
-
-            using (MySqlConnection conn = new MySqlConnection(connectionString))
-            {
-                MySqlCommand cmd = new MySqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@ClientAddress", clientAddress);
-                cmd.Parameters.AddWithValue("@DisconnectionTime", DateTime.Now);
-
-                conn.Open();
-                cmd.ExecuteNonQuery();
             }
         }
     }
