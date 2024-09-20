@@ -1,5 +1,7 @@
-﻿using System;
-using System.Data.SqlClient;
+﻿using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI;
+using System;
+
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -11,6 +13,8 @@ namespace net_cw_client_1
     {
         string username;
         string password;
+        
+        TcpClient client = new TcpClient();
 
         public LoginForm()
         {
@@ -20,46 +24,65 @@ namespace net_cw_client_1
 
         private void loginButton_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Input your username and password to connect chat.");
-            string username = usernameTB.Text;
-            string password = passwordTB.Text;
+            string username = txtUsername.Text;
+            string password = txtPassword.Text;
+            string serverAddress = txtServerAddress.Text;
 
-            if (Authenticate(username, password))
+            try
             {
-                // Open chat form
-                ChatForm chatForm = new ChatForm(username);
-                chatForm.Show();
-                this.Hide();
-            }
-            else
-            {
-                MessageBox.Show("Invalid credentials.");
-            }
+                client = new TcpClient(serverAddress, 25564);
+                NetworkStream stream = client.GetStream();
 
-        }
+                // Send credentials to server
+                string loginData = $"{username};{password};{serverAddress}";
+                byte[] data = Encoding.UTF8.GetBytes(loginData);
+                stream.Write(data, 0, data.Length);
 
-        private bool Authenticate(string username, string password)
-        {
-            using (var connection = new MySqlConnection(connectionString))
-            {
-                connection.Open();
-                string query = "SELECT COUNT(*) FROM Users WHERE Username = @username AND Password = @password";
-                using (var cmd = new MySqlCommand(query, connection))
+                // Wait for server's response
+                byte[] buffer = new byte[1024];
+                int bytesRead = stream.Read(buffer, 0, buffer.Length);
+                string serverResponse = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+
+                if (serverResponse == "OK")
                 {
-                    cmd.Parameters.AddWithValue("@username", username);
-                    cmd.Parameters.AddWithValue("@password", password); // Hash passwords in real applications
-                    int count = Convert.ToInt32(cmd.ExecuteScalar());
-                    return count > 0;
+                    MessageBox.Show("Connected to server!", "Success", MessageBoxButtons.OK);
+                    StartChat(stream);
+                }
+                else
+                {
+                    MessageBox.Show("Authentication failed.", "Error", MessageBoxButtons.OK);
+                    client.Close();
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK);
+            }
+
         }
+
+        //private bool Authenticate(string username, string password)
+        //{
+        //    using (var connection = new MySqlConnection(connectionString))
+        //    {
+        //        connection.Open();
+        //        string query = "SELECT COUNT(*) FROM Users WHERE Username = @username AND Password = @password";
+        //        using (var cmd = new MySqlCommand(query, connection))
+        //        {
+        //            cmd.Parameters.AddWithValue("@username", username);
+        //            cmd.Parameters.AddWithValue("@password", password); // Hash passwords in real applications
+        //            int count = Convert.ToInt32(cmd.ExecuteScalar());
+        //            return count > 0;
+        //        }
+        //    }
+        //}
 
 
         private void Start()
         {
-            TcpClient client = new TcpClient();
+            
             client.Connect("34.118.84.47", 25564);
-            Console.WriteLine("Connected to the server.");
+     
 
             NetworkStream stream = client.GetStream();
 

@@ -1,0 +1,7 @@
+C:\Users\admin\Network\Networks_Chat\net_cw_client_1\obj\Debug\net_cw_client_1.csproj.AssemblyReference.cache
+C:\Users\admin\Network\Networks_Chat\net_cw_client_1\obj\Debug\net_cw_client_1.csproj.SuggestedBindingRedirects.cache
+C:\Users\admin\Network\Networks_Chat\net_cw_client_1\obj\Debug\net_cw_client_1.ChatForm.resources
+C:\Users\admin\Network\Networks_Chat\net_cw_client_1\obj\Debug\net_cw_client_1.LoginForm.resources
+C:\Users\admin\Network\Networks_Chat\net_cw_client_1\obj\Debug\net_cw_client_1.Properties.Resources.resources
+C:\Users\admin\Network\Networks_Chat\net_cw_client_1\obj\Debug\net_cw_client_1.csproj.GenerateResource.cache
+C:\Users\admin\Network\Networks_Chat\net_cw_client_1\obj\Debug\net_cw_client_1.csproj.CoreCompileInputs.cache
