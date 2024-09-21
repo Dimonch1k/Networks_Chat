@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.SqlClient;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -9,97 +8,147 @@ namespace net_cw_client_1
 {
     public partial class LoginForm : Form
     {
-        string username;
-        string password;
+        private TcpClient client;
+        private NetworkStream stream;
 
         public LoginForm()
         {
             InitializeComponent();
-
         }
 
-        private void loginButton_Click(object sender, EventArgs e)
+        private void btnConnect_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Input your username and password to connect chat.");
             string username = usernameTB.Text;
             string password = passwordTB.Text;
+            string serverAddress = serverIpTB.Text;
 
-            if (Authenticate(username, password))
+            try
             {
-                // Open chat form
-                ChatForm chatForm = new ChatForm(username);
-                chatForm.Show();
-                this.Hide();
-            }
-            else
-            {
-                MessageBox.Show("Invalid credentials.");
-            }
+                MessageBox.Show("1", "Success", MessageBoxButtons.OK);
 
-        }
+                client = new TcpClient("34.118.84.47", 25564);
+                stream = client.GetStream();
+                MessageBox.Show("1", "Success", MessageBoxButtons.OK);
 
-        private bool Authenticate(string username, string password)
-        {
-            using (var connection = new MySqlConnection(connectionString))
-            {
-                connection.Open();
-                string query = "SELECT COUNT(*) FROM Users WHERE Username = @username AND Password = @password";
-                using (var cmd = new MySqlCommand(query, connection))
+                // Login request to server
+                string loginData = $"LOGIN;{username};{password};{serverAddress}";
+                byte[] data = Encoding.UTF8.GetBytes(loginData);
+                stream.Write(data, 0, data.Length);
+
+
+                // Wait for server's response about login
+                byte[] buffer = new byte[1024];
+                int bytesRead = stream.Read(buffer, 0, buffer.Length);
+                string serverResponse = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+
+                if (serverResponse == "OK")
                 {
-                    cmd.Parameters.AddWithValue("@username", username);
-                    cmd.Parameters.AddWithValue("@password", password); // Hash passwords in real applications
-                    int count = Convert.ToInt32(cmd.ExecuteScalar());
-                    return count > 0;
+                    MessageBox.Show("Connected to server!", "Success", MessageBoxButtons.OK);
+                    OpenChatWindow(username, stream, client);
                 }
+                else
+                {
+                    MessageBox.Show("Authentication failed.", "Error", MessageBoxButtons.OK);
+                    client.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK);
             }
         }
 
-
-        private void Start()
+        private void btnRegister_Click(object sender, EventArgs e)
         {
-            TcpClient client = new TcpClient();
-            client.Connect("34.118.84.47", 25564);
-            Console.WriteLine("Connected to the server.");
+            string username = usernameTB.Text;
+            string password = passwordTB.Text;
+            string serverAddress = serverIpTB.Text;
 
-            NetworkStream stream = client.GetStream();
-
-            Thread receiveThread = new Thread(() => ReceiveMessages(stream));
-            receiveThread.Start();
-
-            while (true)
+            try
             {
-                string messageToSend = Console.ReadLine();
-                byte[] dataToSend = Encoding.UTF8.GetBytes(messageToSend);
-                stream.Write(dataToSend, 0, dataToSend.Length);
+                client = new TcpClient(serverAddress, 25564);
+                stream = client.GetStream();
 
-                if (messageToSend.ToLower() == "exit")
-                {   
-                    Console.WriteLine("The chat has finished.");
-                    break;
+                // Send registration data to server
+                string registrationData = $"REGISTER;{username};{password};{serverAddress}";
+                byte[] data = Encoding.UTF8.GetBytes(registrationData);
+                stream.Write(data, 0, data.Length);
+
+                // Wait for server's response
+                byte[] buffer = new byte[1024];
+                int bytesRead = stream.Read(buffer, 0, buffer.Length);
+                string serverResponse = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+
+                if (serverResponse == "REGISTER_OK")
+                {
+                    MessageBox.Show("Registration successful!", "Success", MessageBoxButtons.OK);
+                }
+                else
+                {
+                    MessageBox.Show("Registration failed. Username may already be taken.", "Error", MessageBoxButtons.OK);
                 }
             }
-
-            stream.Close();
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK);
+            }
+            //finally
+            //{
+            //    stream.Close();
+            //    client.Close();
+            //}
+        }
+        private void OpenChatWindow(string username, NetworkStream stream, TcpClient client)
+        {
+            this.Hide();
+            ChatForm chatForm = new ChatForm(username, stream, client);
+            chatForm.ShowDialog();
             client.Close();
+            this.Show();
         }
 
-        private void ReceiveMessages(NetworkStream stream)
-        {
-            byte[] buffer = new byte[1024];
-            while (true)
-            {
-                int bytesread = stream.Read(buffer, 0, buffer.Length);
-                string messagereceived = Encoding.UTF8.GetString(buffer, 0, bytesread);
-                Console.WriteLine($"server: {messagereceived}");
+        //private void StartChat(NetworkStream stream)
+        //{
+        //    TcpClient client = new TcpClient();
+        //    client.Connect("34.118.84.47", 25564);
 
-                if (messagereceived.ToLower() == "exit")
-                {
-                    Console.WriteLine("server has finished the chat.");
-                    break;
-                }
-            }
-        }
+        //    NetworkStream stream = client.GetStream();
+
+        //    Thread receiveThread = new Thread(() => ReceiveMessages(stream));
+        //    receiveThread.Start();
+
+        //    while (true)
+        //    {
+        //        string messageToSend = Console.ReadLine();
+        //        byte[] dataToSend = Encoding.UTF8.GetBytes(messageToSend);
+        //        stream.Write(dataToSend, 0, dataToSend.Length);
+
+        //        if (messageToSend.ToLower() == "exit")
+        //        {
+        //            Console.WriteLine("The chat has finished.");
+        //            break;
+        //        }
+        //    }
+
+        //    stream.Close();
+        //    client.Close();
+        //}
+
+        //private void ReceiveMessages(NetworkStream stream)
+        //{
+        //    byte[] buffer = new byte[1024];
+        //    while (true)
+        //    {
+        //        int bytesread = stream.Read(buffer, 0, buffer.Length);
+        //        string messagereceived = Encoding.UTF8.GetString(buffer, 0, bytesread);
+        //        Console.WriteLine($"server: {messagereceived}");
+
+        //        if (messagereceived.ToLower() == "exit")
+        //        {
+        //            Console.WriteLine("server has finished the chat.");
+        //            break;
+        //        }
+        //    }
+        //}
     }
-
-
 }

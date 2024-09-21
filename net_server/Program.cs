@@ -30,41 +30,113 @@ namespace net_cw_1
             NetworkStream stream = client.GetStream();
             byte[] buffer = new byte[1024];
 
-
             try
             {
                 int bytesRead = stream.Read(buffer, 0, buffer.Length);
-                string loginData = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                string[] credentials = loginData.Split(';');
+                string request = Encoding.UTF8.GetString(buffer, 0, bytesRead);
 
-                string username = credentials[0];
-                string password = credentials[1];
-                string serverAddress = credentials[2];
-
-                bool isAuthenticated = AuthenticateUser(username, password, serverAddress);
-
-                if (isAuthenticated)
+                if (request.StartsWith("REGISTER"))
                 {
-                    byte[] okMessage = Encoding.UTF8.GetBytes("OK");
-                    stream.Write(okMessage, 0, okMessage.Length);
+                    string[] registrationData = request.Split(';');
+                    string username = registrationData[1];
+                    string password = registrationData[2];
+                    string serverAddress = registrationData[3];
 
-                    lock (lockObj)
+                    bool registrationSuccess = RegisterUser(username, password, serverAddress);
+
+                    if (registrationSuccess)
                     {
-                        clients.Add(client);
+                        byte[] successMessage = Encoding.UTF8.GetBytes("REGISTER_OK");
+                        stream.Write(successMessage, 0, successMessage.Length);
+                    }
+                    else
+                    {
+                        byte[] errorMessage = Encoding.UTF8.GetBytes("REGISTER_ERROR");
+                        stream.Write(errorMessage, 0, errorMessage.Length);
                     }
 
-                    HandleChat(client, username);
-                }
-                else
-                {
-                    byte[] errorMessage = Encoding.UTF8.GetBytes("ERROR: Authentication failed");
-                    stream.Write(errorMessage, 0, errorMessage.Length);
                     client.Close();
+                }
+                else if (request.StartsWith("LOGIN"))
+                {
+                    HandleLogin(client, stream, request);
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
+
+        static bool RegisterUser(string username, string password, string serverAddress)
+        {
+            try
+            {
+                using (var connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    // Check if the username already exists
+                    string checkQuery = "SELECT COUNT(*) FROM Users WHERE username = @username";
+                    using (var checkCommand = new MySqlCommand(checkQuery, connection))
+                    {
+                        checkCommand.Parameters.AddWithValue("@username", username);
+                        long userCount = (long)checkCommand.ExecuteScalar();
+
+                        if (userCount > 0)
+                        {
+                            Console.WriteLine($"Registration failed: Username {username} already exists.");
+                            return false;
+                        }
+                    }
+
+                    // Insert the new user into the database
+                    string query = "INSERT INTO Users (username, password, server_address) VALUES (@username, @password, @serverAddress)";
+                    using (var command = new MySqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@username", username);
+                        command.Parameters.AddWithValue("@password", password);
+                        command.Parameters.AddWithValue("@serverAddress", serverAddress);
+                        command.ExecuteNonQuery();
+                    }
+                    Console.WriteLine($"User {username} registered successfully.");
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error registering user: {ex.Message}");
+                return false;
+            }
+        }
+
+        static void HandleLogin(TcpClient client, NetworkStream stream, string loginRequest)
+        {
+            string[] credentials = loginRequest.Split(';');
+
+            string username = credentials[1];
+            string password = credentials[2];
+            string serverAddress = credentials[3];
+
+            bool isAuthenticated = AuthenticateUser(username, password, serverAddress);
+
+            if (isAuthenticated)
+            {
+                byte[] okMessage = Encoding.UTF8.GetBytes("OK");
+                stream.Write(okMessage, 0, okMessage.Length);
+
+                lock (lockObj)
+                {
+                    clients.Add(client);
+                }
+
+                HandleChat(client, username);
+            }
+            else
+            {
+                byte[] errorMessage = Encoding.UTF8.GetBytes("ERROR: Authentication failed");
+                stream.Write(errorMessage, 0, errorMessage.Length);
+                client.Close();
             }
         }
 
@@ -90,34 +162,6 @@ namespace net_cw_1
                 }
             }
             return false;
-        }
-
-        static bool RegisterUser(string username, string password)
-        {
-            using (var connection = new MySqlConnection(connectionString))
-            {
-                connection.Open();
-
-                string checkQuery = "SELECT COUNT(*) FROM Users WHERE username = @username";
-                using (var checkCommand = new MySqlCommand(checkQuery, connection))
-                {
-                    checkCommand.Parameters.AddWithValue("@username", username);
-                    int userCount = Convert.ToInt32(checkCommand.ExecuteScalar());
-
-                    if (userCount > 0) return false;
-                }
-
-
-                string query = "INSERT INTO Users (username, password) VALUES (@username, @password)";
-                using (var cmd = new MySqlCommand(query, connection))
-                {
-                    cmd.Parameters.AddWithValue("@username", username);
-                    cmd.Parameters.AddWithValue("@passwordHash", password);
-
-                    int result = cmd.ExecuteNonQuery();
-                    return result > 0;
-                }
-            }
         }
 
         static void HandleChat(TcpClient client, string username)

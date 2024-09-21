@@ -8,62 +8,84 @@ namespace net_cw_client_1
 {
     public partial class ChatForm : Form
     {
-        private TcpClient client;
-        private NetworkStream stream;
         private string username;
+        private NetworkStream stream;
+        private TcpClient client;
+        private Thread listenThread;
 
-        public ChatForm(string username)
+        public ChatForm(string username, NetworkStream stream, TcpClient client)
         {
             InitializeComponent();
-            this.username = username;
 
-            // Connect to server
-            client = new TcpClient("127.0.0.1", 25564); // Adjust IP and port as needed
-            stream = client.GetStream();
-            BeginReceivingMessages();
+            this.username = username;
+            this.stream = stream;
+            this.client = client;
+
+            listenThread = new Thread(ListenForMessages);
+            listenThread.Start();
         }
 
-        private void btnSend_Click(object sender, EventArgs e)
+        private void btnSend_Click(object sender, System.EventArgs e)
         {
-            string message = txtMessage.Text;
-            if (!string.IsNullOrEmpty(message))
+            MessageInputDialog inputDialog = new MessageInputDialog();
+            inputDialog.ShowDialog();
+            if (inputDialog.ShowDialog() == DialogResult.OK)
             {
-                byte[] data = Encoding.UTF8.GetBytes($"{username}: {message}");
-                stream.Write(data, 0, data.Length);
-                txtMessage.Clear();
+                string message = inputDialog.MessageText;
+                SendMessage(message);
             }
         }
 
-        private void BeginReceivingMessages()
+        private void SendMessage(string message)
         {
-            var receiveThread = new Thread(() =>
+            try
             {
-                byte[] buffer = new byte[1024];
-                while (true)
-                {
-                    try
-                    {
-                        int bytesRead = stream.Read(buffer, 0, buffer.Length);
-                        if (bytesRead == 0) break;
-
-                        string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                        this.Invoke(new Action(() => lstMessages.Items.Add(message)));
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Error receiving message: {ex.Message}");
-                        break;
-                    }
-                }
-            });
-            receiveThread.Start();
+                string formattedMessage = $"{username}: {message}";
+                byte[] data = Encoding.UTF8.GetBytes(formattedMessage);
+                stream.Write(data, 0, data.Length);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error sending message: {ex.Message}", "Error", MessageBoxButtons.OK);
+            }
         }
 
-        protected override void OnFormClosing(FormClosingEventArgs e)
+        private void ListenForMessages()
         {
-            base.OnFormClosing(e);
+            byte[] buffer = new byte[1024];
+            while (true)
+            {
+                try
+                {
+                    int bytesRead = stream.Read(buffer, 0, buffer.Length);
+                    if (bytesRead == 0) break;
+
+                    string messageReceived = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                    DisplayMessage(messageReceived);
+                }
+                catch (Exception)
+                {
+                    this.Invoke((MethodInvoker)delegate { this.Close(); });
+                }
+            }
+        }
+
+        private void DisplayMessage(string message)
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action<string>(DisplayMessage), message);
+                return;
+            }
+            messageHistory.AppendText(message + Environment.NewLine);
+        }
+
+
+        private void ChatForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
             stream.Close();
             client.Close();
+            listenThread.Abort();
         }
     }
 }
