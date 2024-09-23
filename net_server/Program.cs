@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using System.Data.Common;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -9,7 +10,7 @@ namespace net_cw_1
     {
         static List<TcpClient> clients = new List<TcpClient>();
         static object lockObj = new object();
-        static string connectionString = "Server=34.118.84.47;Database=bdatab;User ID=bogdan;Password=!Bogdan666;";
+        static string connectionString = "Server=34.118.84.47;Database=bdatab;Uid=bogdan;Pwd=!Bogdan666;";
 
         static void Main(string[] args)
         {
