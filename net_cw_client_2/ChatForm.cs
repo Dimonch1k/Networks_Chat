@@ -29,7 +29,7 @@ namespace net_cw_client_2
         {
             MessageInputDialog inputDialog = new MessageInputDialog();
             inputDialog.ShowDialog();
-            if (inputDialog.ShowDialog() == DialogResult.OK)
+            if (inputDialog.DialogResult == DialogResult.OK)
             {
                 string message = inputDialog.MessageText;
                 SendMessage(message);

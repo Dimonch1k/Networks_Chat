@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("net_cw_client_2")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+089affd518aa3a97e273317a85b24028fdef7d00")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c543d65462709e60caca0f5d11bf4245146c374d")]
 [assembly: System.Reflection.AssemblyProductAttribute("net_cw_client_2")]
 [assembly: System.Reflection.AssemblyTitleAttribute("net_cw_client_2")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

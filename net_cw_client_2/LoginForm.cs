@@ -1,8 +1,5 @@
-﻿using System;
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 using System.Text;
-using System.Threading;
-using System.Windows.Forms;
 
 namespace net_cw_client_2
 {
@@ -24,7 +21,6 @@ namespace net_cw_client_2
 
             try
             {
-
                 client = new TcpClient("34.118.84.47", 25564);
                 stream = client.GetStream();
 

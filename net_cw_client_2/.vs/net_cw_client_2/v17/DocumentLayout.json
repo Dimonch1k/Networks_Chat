@@ -3,8 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\dmytro\\Desktop\\Git\\Networks_Chat\\net_cw_client_2\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{0950B671-B92E-4544-873F-0C6951D81FBB}|net_cw_client_2.csproj|c:\\users\\dmytro\\desktop\\git\\networks_chat\\net_cw_client_2\\messageinputdialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{0950B671-B92E-4544-873F-0C6951D81FBB}|net_cw_client_2.csproj|solutionrelative:messageinputdialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{0950B671-B92E-4544-873F-0C6951D81FBB}|net_cw_client_2.csproj|c:\\users\\dmytro\\desktop\\git\\networks_chat\\net_cw_client_2\\chatform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0950B671-B92E-4544-873F-0C6951D81FBB}|net_cw_client_2.csproj|solutionrelative:chatform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0950B671-B92E-4544-873F-0C6951D81FBB}|net_cw_client_2.csproj|c:\\users\\dmytro\\desktop\\git\\networks_chat\\net_cw_client_2\\loginform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -23,14 +23,15 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "MessageInputDialog.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\dmytro\\Desktop\\Git\\Networks_Chat\\net_cw_client_2\\MessageInputDialog.cs",
-              "RelativeDocumentMoniker": "MessageInputDialog.cs",
-              "ToolTip": "C:\\Users\\dmytro\\Desktop\\Git\\Networks_Chat\\net_cw_client_2\\MessageInputDialog.cs [Design]",
-              "RelativeToolTip": "MessageInputDialog.cs [Design]",
+              "Title": "ChatForm.cs",
+              "DocumentMoniker": "C:\\Users\\dmytro\\Desktop\\Git\\Networks_Chat\\net_cw_client_2\\ChatForm.cs",
+              "RelativeDocumentMoniker": "ChatForm.cs",
+              "ToolTip": "C:\\Users\\dmytro\\Desktop\\Git\\Networks_Chat\\net_cw_client_2\\ChatForm.cs",
+              "RelativeToolTip": "ChatForm.cs",
+              "ViewState": "AQIAABYAAAAAAAAAAAAgwBoAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-23T17:41:08.613Z",
-              "EditorCaption": " [Design]"
+              "WhenOpened": "2024-09-23T17:50:34.668Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -40,7 +41,7 @@
               "RelativeDocumentMoniker": "LoginForm.cs",
               "ToolTip": "C:\\Users\\dmytro\\Desktop\\Git\\Networks_Chat\\net_cw_client_2\\LoginForm.cs",
               "RelativeToolTip": "LoginForm.cs",
-              "ViewState": "AQIAAEAAAAAAAAAAAAAowEAAAAAPAAAA",
+              "ViewState": "AQIAADoAAAAAAAAAAAAowBoAAAAqAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-23T16:02:18.993Z",
               "EditorCaption": ""
