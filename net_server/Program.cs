@@ -10,7 +10,7 @@ namespace net_cw_1
     {
         static List<TcpClient> clients = new List<TcpClient>();
         static object lockObj = new object();
-        static string connectionString = "Server=34.118.84.47;Database=bdatab;Uid=bogdan;Pwd=!Bogdan666;";
+        static string connectionString = "Server=localhost;Database=bdatab;Uid=bogdan;Pwd=!Bogdan666;";
 
         static void Main(string[] args)
         {
@@ -75,12 +75,16 @@ namespace net_cw_1
             {
                 using (var connection = new MySqlConnection(connectionString))
                 {
+                    Console.WriteLine("Before connection");
                     connection.Open();
+                    Console.WriteLine("After connection");
 
                     // Check if the username already exists
                     string checkQuery = "SELECT COUNT(*) FROM users WHERE username = @username";
                     using (var checkCommand = new MySqlCommand(checkQuery, connection))
                     {
+                        Console.WriteLine("Using connection");
+
                         checkCommand.Parameters.AddWithValue("@username", username);
                         long userCount = (long)checkCommand.ExecuteScalar();
 
