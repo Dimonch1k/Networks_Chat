@@ -64,7 +64,7 @@ namespace net_cw_client_2
 
             try
             {
-                client = new TcpClient(serverAddress, 25564);
+                client = new TcpClient("34.118.84.47", 25564);
                 stream = client.GetStream();
 
                 // Send registration data to server

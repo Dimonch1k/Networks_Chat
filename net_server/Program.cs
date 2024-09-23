@@ -78,7 +78,7 @@ namespace net_cw_1
                     connection.Open();
 
                     // Check if the username already exists
-                    string checkQuery = "SELECT COUNT(*) FROM Users WHERE username = @username";
+                    string checkQuery = "SELECT COUNT(*) FROM users WHERE username = @username";
                     using (var checkCommand = new MySqlCommand(checkQuery, connection))
                     {
                         checkCommand.Parameters.AddWithValue("@username", username);
@@ -92,7 +92,7 @@ namespace net_cw_1
                     }
 
                     // Insert the new user into the database
-                    string query = "INSERT INTO Users (username, password, server_address) VALUES (@username, @password, @serverAddress)";
+                    string query = "INSERT INTO users (username, password, server_address) VALUES (@username, @password, @serverAddress)";
                     using (var command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@username", username);
