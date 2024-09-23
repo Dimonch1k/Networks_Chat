@@ -28,60 +28,62 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.messageTB = new System.Windows.Forms.TextBox();
-            this.btnSend = new System.Windows.Forms.Button();
-            this.btnCancel = new System.Windows.Forms.Button();
-            this.SuspendLayout();
+            messageTB = new TextBox();
+            btnSend = new Button();
+            btnCancel = new Button();
+            SuspendLayout();
             // 
             // messageTB
             // 
-            this.messageTB.Dock = System.Windows.Forms.DockStyle.Top;
-            this.messageTB.Location = new System.Drawing.Point(0, 0);
-            this.messageTB.Multiline = true;
-            this.messageTB.Name = "messageTB";
-            this.messageTB.ReadOnly = true;
-            this.messageTB.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.messageTB.Size = new System.Drawing.Size(223, 81);
-            this.messageTB.TabIndex = 0;
+            messageTB.Dock = DockStyle.Top;
+            messageTB.Location = new Point(0, 0);
+            messageTB.Margin = new Padding(4, 3, 4, 3);
+            messageTB.Multiline = true;
+            messageTB.Name = "messageTB";
+            messageTB.ScrollBars = ScrollBars.Vertical;
+            messageTB.Size = new Size(260, 93);
+            messageTB.TabIndex = 0;
             // 
             // btnSend
             // 
-            this.btnSend.BackColor = System.Drawing.Color.PaleGreen;
-            this.btnSend.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSend.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnSend.Location = new System.Drawing.Point(11, 87);
-            this.btnSend.Name = "btnSend";
-            this.btnSend.Size = new System.Drawing.Size(97, 31);
-            this.btnSend.TabIndex = 1;
-            this.btnSend.Text = "Send";
-            this.btnSend.UseVisualStyleBackColor = false;
-            this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
+            btnSend.BackColor = Color.PaleGreen;
+            btnSend.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnSend.ForeColor = SystemColors.ControlText;
+            btnSend.Location = new Point(13, 100);
+            btnSend.Margin = new Padding(4, 3, 4, 3);
+            btnSend.Name = "btnSend";
+            btnSend.Size = new Size(113, 36);
+            btnSend.TabIndex = 1;
+            btnSend.Text = "Send";
+            btnSend.UseVisualStyleBackColor = false;
+            btnSend.Click += btnSend_Click;
             // 
             // btnCancel
             // 
-            this.btnCancel.BackColor = System.Drawing.Color.LightCoral;
-            this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancel.Location = new System.Drawing.Point(114, 87);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(97, 31);
-            this.btnCancel.TabIndex = 2;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = false;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            btnCancel.BackColor = Color.LightCoral;
+            btnCancel.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnCancel.Location = new Point(133, 100);
+            btnCancel.Margin = new Padding(4, 3, 4, 3);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(113, 36);
+            btnCancel.TabIndex = 2;
+            btnCancel.Text = "Cancel";
+            btnCancel.UseVisualStyleBackColor = false;
+            btnCancel.Click += btnCancel_Click;
             // 
             // MessageInputDialog
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(223, 126);
-            this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.btnSend);
-            this.Controls.Add(this.messageTB);
-            this.Name = "MessageInputDialog";
-            this.Text = "MessageInputDialog";
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(260, 145);
+            Controls.Add(btnCancel);
+            Controls.Add(btnSend);
+            Controls.Add(messageTB);
+            Margin = new Padding(4, 3, 4, 3);
+            Name = "MessageInputDialog";
+            Text = "MessageInputDialog";
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

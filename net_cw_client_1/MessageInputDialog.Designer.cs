@@ -39,7 +39,6 @@
             this.messageTB.Location = new System.Drawing.Point(0, 0);
             this.messageTB.Multiline = true;
             this.messageTB.Name = "messageTB";
-            this.messageTB.ReadOnly = true;
             this.messageTB.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.messageTB.Size = new System.Drawing.Size(223, 81);
             this.messageTB.TabIndex = 0;
