@@ -150,7 +150,7 @@ namespace net_cw_1
             using (var connection = new MySqlConnection(connectionString))
             {
                 connection.Open();
-                string query = "SELECT * FROM Users WHERE username = @username AND password = @password";
+                string query = "SELECT * FROM users WHERE username = @username AND password = @password";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@username", username);
