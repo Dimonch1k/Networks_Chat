@@ -111,6 +111,7 @@
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MyClient.cs" />
+    <Compile Include="ObjectsForForm\ObjectsForConnectionForm.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Start Form.cs">
@@ -119,7 +120,7 @@
     <Compile Include="Start Form.Designer.cs">
       <DependentUpon>Start Form.cs</DependentUpon>
     </Compile>
-    <Compile Include="StartConnection.cs" />
+    <Compile Include="Connection.cs" />
     <EmbeddedResource Include="ChatForm.resx">
       <DependentUpon>ChatForm.cs</DependentUpon>
     </EmbeddedResource>
