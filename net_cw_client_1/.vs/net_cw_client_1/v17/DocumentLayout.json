@@ -7,7 +7,7 @@
       "RelativeMoniker": "D:0:0:{2FC0FF59-5508-48F5-8A07-A657E26F4528}|net_cw_client_1.csproj|solutionrelative:loginform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2FC0FF59-5508-48F5-8A07-A657E26F4528}|net_cw_client_1.csproj|c:\\users\\dmytro\\desktop\\git\\networks_chat\\net_cw_client_1\\chatform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{2FC0FF59-5508-48F5-8A07-A657E26F4528}|net_cw_client_1.csproj|C:\\Users\\dmytro\\Desktop\\Git\\Networks_Chat\\net_cw_client_1\\chatform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2FC0FF59-5508-48F5-8A07-A657E26F4528}|net_cw_client_1.csproj|solutionrelative:chatform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -32,7 +32,7 @@
               "RelativeDocumentMoniker": "LoginForm.cs",
               "ToolTip": "C:\\Users\\dmytro\\Desktop\\Git\\Networks_Chat\\net_cw_client_1\\LoginForm.cs",
               "RelativeToolTip": "LoginForm.cs",
-              "ViewState": "AQIAAD4AAAAAAAAAAAAwwEEAAAAAAAAA",
+              "ViewState": "AQIAACcAAAAAAAAAAAAowCcAAAA4AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-20T23:29:56.318Z",
               "EditorCaption": ""
@@ -46,8 +46,7 @@
               "ToolTip": "C:\\Users\\dmytro\\Desktop\\Git\\Networks_Chat\\net_cw_client_1\\ChatForm.cs [Design]",
               "RelativeToolTip": "ChatForm.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-16T17:56:33.32Z",
-              "EditorCaption": " [Design]"
+              "WhenOpened": "2024-09-16T17:56:33.32Z"
             },
             {
               "$type": "Document",
@@ -59,8 +58,7 @@
               "RelativeToolTip": "ChatForm.cs",
               "ViewState": "AQIAAC4AAAAAAAAAAAAUwFYAAAAbAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-16T17:56:54.13Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-16T17:56:54.13Z"
             }
           ]
         }

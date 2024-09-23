@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace net_cw_client_1
+namespace net_cw_client_2
 {
     public partial class LoginForm : Form
     {
