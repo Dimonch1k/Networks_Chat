@@ -27,7 +27,6 @@ namespace net_cw_client_2
 
                 client = new TcpClient("34.118.84.47", 25564);
                 stream = client.GetStream();
-                MessageBox.Show("2", "Success", MessageBoxButtons.OK);
 
                 // Login request to server
                 string loginData = $"LOGIN;{username};{password};{serverAddress}";
